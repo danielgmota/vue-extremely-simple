@@ -8,14 +8,60 @@
   </head>
   <body>
     <div id="app">
-      <p>{{ result }}</p>
+      <h1>IMC Calc</h1>
+      <p>Enter with your numbers and key Enter</p>
+      <p>
+        <label>
+          Your weight
+          <input
+            autofocus
+            type="number"
+            v-model="weight"
+            id="weightValue"
+            v-on:keyup.enter="calcImc()"
+          />
+        </label>
+      </p>
+      <p>
+        <label>
+          Your height
+          <input
+            type="text"
+            v-model="height"
+            id="heightValue"
+            @keyup.enter="calcImc()"
+          />
+        </label>
+      </p>
+      <p>Your IMC: <strong> {{result}} </strong></p>
+      <p>Category: {{cat}}</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
       new Vue({
         el: '#app',
         data: {
-          result: 'Hello World',
+          result: '',
+          cat: '',
+          weight: '80',
+          height: '1.80',
+        },
+        methods: {
+          calcImc: function () {
+            const weightContent = this.$el.querySelector('#weightValue').value;
+            const heightContent = this.$el.querySelector('#heightValue').value;
+            this.result = weightContent / (heightContent * heightContent);
+            this.result = this.result.toFixed(2);
+            if (this.result <= 18.5) {
+              this.cat = 'Thinness';
+            } else if (this.result >= 18.5 && this.result <= 24.9) {
+              this.cat = 'Normal';
+            } else if (this.result >= 24.9 && this.result <= 30) {
+              this.cat = 'Overweight';
+            } else if (this.result >= 30) {
+              this.cat = 'Obesity';
+            }
+          },
         },
       });
     </script>
